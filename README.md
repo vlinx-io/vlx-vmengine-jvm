@@ -1,5 +1,7 @@
 # VLX-VMENGINE-JVM
 
+[中文说明](https://github.com/vlinx-io/vlx-vmengine-jvm/blob/main/README_zh.md)
+
 ## Java Bytecode Execution Engine
 
 Traditional Java dynamic debugging can only be done at the source code level. If there is no source code, or if the Java class file is obfuscated, dynamic debugging cannot be performed.
