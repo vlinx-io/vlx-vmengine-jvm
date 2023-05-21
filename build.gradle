@@ -1,0 +1,61 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.7.21'
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
+    id 'application'
+}
+
+group = 'io.vlinx'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'commons-codec:commons-codec:1.15'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'org.apache.bcel:bcel:6.7.0'
+    implementation 'org.ow2.asm:asm:9.4'
+
+    implementation 'io.vlinx:basic-utils:1.0.4'
+    implementation 'io.vlinx:config-utils:1.0.2'
+    implementation 'io.vlinx:vlinx-communicate:1.0.2'
+    implementation 'io.vlinx:process-utils:1.0.1'
+
+    implementation 'org.burningwave:core:12.62.5'
+
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+}
+
+
+test {
+    useJUnitPlatform()
+    jvmArgs = ['--add-opens=java.base/java.lang.invoke=ALL-UNNAMED', '--add-opens=java.base/jdk.internal.module=ALL-UNNAMED']
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = '17'
+//    kotlinOptions.freeCompilerArgs.add('--add-opens=java.base/jdk.internal.module=ALL-UNNAMED')
+}
+
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = '17'
+
+}
+
+application {
+    mainClassName = 'io.vlinx.vmengine.MainKt'
+}
+
+
+tasks.withType(JavaExec) {
+    jvmArgs '--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED'
+    jvmArgs '--add-opens=java.base/jdk.internal.reflect=ALL-UNNAMED'
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ["--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED", '--add-exports=java.base/jdk.internal.reflect=ALL-UNNAMED']
+}

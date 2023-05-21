@@ -1,36 +1,36 @@
 # VLX-VMENGINE-JVM
 
-## Java Bytecode Execution Engine
+## JAVA 字节码执行引擎
 
-Traditional Java dynamic debugging can only be done at the source code level. If there is no source code, or if the Java class file is obfuscated, dynamic debugging cannot be performed.
+传统的Java动态调试仅能够基于源码级别，如果没有源码，或者被混淆后的Java类文件，则无法进行动态调试。
 
-Java programs run on the JVM (Java Virtual Machine). The JVM uses bytecode as the basis for execution. We have built a JVM bytecode execution engine using Kotlin, which allows us to debug Java programs at the bytecode level using modern IDEs, such as IntelliJ IDEA, to observe the program's runtime behavior.
+Java程序的运行基于JVM虚拟机， JVM虚拟机以字节码作为执行的基础，我们使用Kotlin构造了一个JVM字节码执行引擎，可以借助现代的IDE，如IDEA，在字节码层面对Java程序进行调试，以观察程序的运行行为。
 
-**Please note that this project is for learning and researching the JVM's operating principles and analyzing malicious programs only. It is strictly forbidden to use it for illegal purposes.**
+**注意，本项目仅用于学习和研究JVM的运行原理以及对恶意程序进行分析，严禁将其应用于非法用途。**
 
-## Prerequisites
+## 前置知识基础
 
-Before using this project, please make sure you have the following knowledge:
+使用本项目前，请确保你已经有如下知识基础
 
-1. Understand the format of Java class files
-2. Understand the purpose and meaning of each JVM bytecode
+1. 了解Java类文件的格式
+2. 了解JVM的各个字节码的作用和含义
 
-## Debugging at the Bytecode Level with IntelliJ IDEA
+## 使用IDEA在字节码层面进行调试
 
 ```bash
 git clone https://github.com/vlinx-io/vlx-vmengine-jvm.git
 ```
 
-Open the project with IntelliJ IDEA (requires JDK 17) and navigate to TestCases.
+使用IDEA打开本项目(需要JDK17)，并转到TestCases
 
-There are two test cases in TestCases, one for executing static methods and one for executing instance methods, named `executeStaticMethod` and `executeVirtualMethod` respectively.
+TestCases中有两个测试用例，一个用于执行静态方法，一个用于执行实例方法，分别为`executeStaticMethod`与`executeVirtualMethod`,
 
-Fill in the `classPath`, `className`, `methodName`, and `methodSignature` information for the corresponding methods.
-Detailed information about the class file can be viewed using [ClassViewer](https://github.com/ClassViewer/ClassViewer).
+在对应的方法上，填充上`classPath`, `className`, `methodName`, `methodSignature`这些信息，
+类文件的详细信息可以使用[ClassViewer](https://github.com/ClassViewer/ClassViewer)查看。
 
-### Running Directly
+### 直接运行
 
-Take the class file compiled from the following code as an example:
+以下面这段代码编译的类文件为例
 
 ```java
 public class Hello {
@@ -45,7 +45,7 @@ public class Hello {
 }
 ```
 
-Execute `executeVirtualMethod` to run the `hello` method of the class:
+执行`executeVirtualMethod`, 运行该类的hello方法
 
 ```kotlin
 val classPath = "your-classpath"
@@ -68,7 +68,7 @@ val thread = VMThread(VMEngine.instance, loader)
 thread.execute(instance, method!!, args, true, 0)
 ```
 
-You can get the following output in the console:
+可以在控制台得到如下输出
 
 ```bash
 2023-05-21 17:51:10 [DEBUG] Execute method: public void Hello.hello()
@@ -97,11 +97,11 @@ hello
 2023-05-21 17:51:11 [DEBUG] "L8: RETURN"
 ```
 
-The console output displays all the bytecode instructions of the method, the changes in the stack during instruction execution, and the results of each bytecode instruction running.
+控制台输出展示了该方法所有的字节码指令，在指令执行中堆栈的变化情况，以及每个字节码指令运行的结果
 
 ### 断点调试
 
-If you need to debug bytecode instructions with breakpoints, you can set breakpoints in the `execute()` method of the `VMExecutor`.
+如果需要断点调试字节码指令，可以在`VMExecutor`中的`execute()`方法上下断点
 
 ```kotlin
  fun execute() {
@@ -123,9 +123,10 @@ If you need to debug bytecode instructions with breakpoints, you can set breakpo
 }
 ```
 
-### Debugging Sub-method Bytecode
+### 调试子方法字节码
 
-By default, the virtual engine only interprets and executes the bytecode of the specified method. The sub-methods called within the specified method still run in the JVM to avoid the huge performance overhead of multi-level calls. If you want all methods to be interpreted and executed by the virtual engine, please modify `io.vlinx.vmengine.Options` and set `handleSubMethod` to true.
+默认情况下，虚拟引擎仅解释执行指定方法的字节码，在指定方法中调用的子方法，仍然在JVM中运行，避免多层调用的巨大性能开销，如果希望所有的方法都通过虚拟引擎
+解释执行，请修改`io.vlinx.vmengine.Options`，将`handleSubMethod`修改为true
 
 
 
