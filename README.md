@@ -101,7 +101,7 @@ hello
 
 The console output displays all the bytecode instructions of the method, the changes in the stack during instruction execution, and the results of each bytecode instruction running.
 
-### 断点调试
+### Breakpoint debugging
 
 If you need to debug bytecode instructions with breakpoints, you can set breakpoints in the `execute()` method of the `VMExecutor`.
 
